@@ -3,10 +3,9 @@ const router = express.Router();
 
 const controller = require('../../resources/bed/bed.controller');
 
-router.get('/', (req, res) => {
-  res.json({ status: 200 });
-});
+router.get('/', controller.getBeds);
 router.post('/', controller.addBed);
+router.get('/:id', controller.getBed);
 router.put('/:id', controller.updateBed);
 router.delete('/:id', controller.deleteBed);
 
