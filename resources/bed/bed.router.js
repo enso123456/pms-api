@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const controller = require('../../resources/bed/bed.controller');
+const controller = require('./bed.controller');
 
 router.get('/', controller.getBeds);
 router.post('/', controller.addBed);
