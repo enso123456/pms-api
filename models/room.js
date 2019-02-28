@@ -9,18 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER
   }, {});
   room.associate = function (models) {
-    // associations can be defined here
-    room.hasOne(models.amentie, {
-      foreignkey: 'ameneties_id',
-      as: 'amenities'
-    });
-    room.hasOne(models.feature, {
-      foreignkey: 'features_id',
-      as: 'features'
-    });
-    room.hasOne(models.bed, {
-      foreignkey: 'beds_id',
-      as: 'beds'
+    room.belongsTo(models.RoomType, {
+      foreignKey: 'id',
+      sourceKey: 'roomId'
     });
   };
   return room;

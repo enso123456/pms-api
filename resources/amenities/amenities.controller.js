@@ -2,7 +2,7 @@ const models = require('../../models');
 
 exports.getAmenities = async (req, res) => {
   try {
-    const amenties = await models.amentie.findAll({ attributes: { exclude: ['amenityId'] } });
+    const amenties = await models.amenities.findAll({ attributes: { exclude: ['amenityId'] } });
     res.json(amenties);
   } catch (e) {
     throw new Error(e);
@@ -15,9 +15,10 @@ exports.createAmenities = async (req, res) => {
     if (!name) {
       throw new Error("Please provide a name");
     }
-    const newBed = await models.amentie.create({ name });
-    res.json(newBed);
+    const amenitie = await models.amenities.create({ name });
+    res.json(amenitie);
   } catch (e) {
+    console.log(e);
     throw new Error(e);
   }
 };
@@ -25,7 +26,7 @@ exports.createAmenities = async (req, res) => {
 exports.getAmenity = async (req, res) => {
   try {
     const id = req.params.id;
-    const amenties = await models.amentie.findAll({
+    const amenties = await models.amenities.findAll({
       where: {
         id
       },
@@ -47,7 +48,7 @@ exports.updateAmenities = async (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
 
-    const amentie = await models.amentie.update({
+    const amentie = await models.amenities.update({
       name
     }, {
         where: {
@@ -65,7 +66,7 @@ exports.updateAmenities = async (req, res) => {
 exports.deleteAmenities = async (req, res) => {
   try {
     const id = req.params.id;
-    await models.amentie.destroy({ where: { id } });
+    await models.amenities.destroy({ where: { id } });
     res.json({ status: 200 });
   } catch (e) {
     throw new Error(e);
