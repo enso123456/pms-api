@@ -3,10 +3,14 @@ const express = require('express');
 const router = express.Router();
 
 const controller = require('./room.controller');
-const roomFeatureRouter = require('./room.feature.router');
+const featureRouter = require('./feature.router');
+const amenitiesRouter = require('./amenities.router');
+const typesRouter = require('./types.router');
 
-/* Room Features */
-router.use('/features', roomFeatureRouter);
+/* Room Features/Amenities */
+router.use('/features', featureRouter);
+router.use('/amenities', amenitiesRouter);
+router.use('/types', typesRouter);
 
 /* Room Route */
 router.get('/', controller.getRooms);

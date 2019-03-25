@@ -1,14 +1,14 @@
 const models = require('../../models');
 
-exports.getRoomFeatures = async (req, res) => {
+exports.getRoomAmenities = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const room = await models.RoomFeature.findAll({
+    const room = await models.RoomAmenities.findAll({
       where: { 'roomId': id },
       attributes: [],
       include: [{
-        model: models.Feature,
+        model: models.Amenities,
       }],
     });
 
@@ -18,37 +18,37 @@ exports.getRoomFeatures = async (req, res) => {
   }
 }
 
-exports.addRoomFeature = async (req, res) => {
+exports.addRoomAmenities = async (req, res) => {
   try {
     const {
       roomId,
-      featureId,
+      amenitieId,
     } = req.body;
 
-    const roomFeature = await models.RoomFeature.create({
+    const amenities = await models.RoomAmenities.create({
       roomId,
-      featureId,
+      amenitieId,
     });
 
-    return res.json({ code: 200, roomFeature });
+    return res.json({ code: 200, amenities });
   } catch (e) {
     console.log(e);
   }
 }
 
 /**
- * update room feature
+ * update room amenities
  * @param
- * featureId: ${id}
+ * amenitieId: ${id}
  */
 
-exports.updateRoomFeature = async (req, res) => {
+exports.updateRoomAmenities = async (req, res) => {
   try {
     const { id } = req.params;
-    const { featureId } = req.body;
+    const { amenitieId } = req.body;
 
-    await models.RoomFeature.update({
-      featureId
+    await models.RoomAmenities.update({
+      amenitieId
     }, { where: { id } });
 
     res.json({ code: 200, message: 'Successfully Updated' });
@@ -57,12 +57,10 @@ exports.updateRoomFeature = async (req, res) => {
   }
 }
 
-
-
-exports.deleteRoomFeature = async (req, res) => {
+exports.deleteRoomAmenities = async (req, res) => {
   try {
     const { id } = req.params;
-    await models.RoomFeature.destroy({ where: { id } });
+    await models.RoomAmenities.destroy({ where: { id } });
 
     res.json({
       code: 200, message: 'Deleted'

@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'id',
       targetKey: 'roomId'
     });
+    Room.belongsTo(models.RoomAmenities, {
+      foreignKey: 'id',
+      targetKey: 'roomId'
+    });
+    Room.belongsTo(models.RoomTypes, {
+      foreignKey: 'id',
+      targetKey: 'roomId'
+    });
   };
   return Room;
 };

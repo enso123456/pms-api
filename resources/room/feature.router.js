@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const controller = require('./roomFeature.controller');
+const controller = require('./feature.controller');
 
 router.get('/:id', controller.getRoomFeatures);
 router.post('/', controller.addRoomFeature);
