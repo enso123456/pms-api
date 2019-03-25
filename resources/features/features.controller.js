@@ -2,7 +2,7 @@ const models = require('../../models');
 
 exports.getFeatures = async (req, res) => {
   try {
-    const features = await models.feature.findAll({ attributes: { exclude: ['featureId'] } });
+    const features = await models.Feature.findAll({});
     res.json(features);
   } catch (e) {
     throw new Error(e);
@@ -15,7 +15,7 @@ exports.addFeatures = async (req, res) => {
     if (!name) {
       return res.json({ code: 500, message: "Please provide a name." })
     }
-    const newFeature = await models.feature.create({ name });
+    const newFeature = await models.Feature.create({ name });
     res.json(newFeature);
   } catch (e) {
     throw new Error(e);
@@ -25,13 +25,10 @@ exports.addFeatures = async (req, res) => {
 exports.getFeature = async (req, res) => {
   try {
     const id = req.params.id;
-    const features = await models.feature.findAll({
+    const features = await models.Feature.findAll({
       where: {
         id
       },
-      attributes: {
-        exclude: ['featureId']
-      }
     });
     if (features.length === 0) {
       return res.json({ code: 404, message: "Cannot be found." })
@@ -47,7 +44,7 @@ exports.updateFeatures = async (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
 
-    const feature = await models.feature.update({
+    const feature = await models.Feature.update({
       name
     }, {
         where: {
@@ -65,7 +62,7 @@ exports.updateFeatures = async (req, res) => {
 exports.deleteFeatures = async (req, res) => {
   try {
     const id = req.params.id;
-    await models.feature.destroy({ where: { id } });
+    await models.Feature.destroy({ where: { id } });
     res.json({ status: 200 });
   } catch (e) {
     throw new Error(e);

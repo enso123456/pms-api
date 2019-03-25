@@ -1,18 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const room = sequelize.define('room', {
-    name: DataTypes.STRING,
-    available_qty: DataTypes.INTEGER,
-    description: DataTypes.STRING,
-    size: DataTypes.INTEGER,
-    bed_qty: DataTypes.INTEGER,
-    price: DataTypes.INTEGER
+  const Room = sequelize.define('Room', {
+    room_number: DataTypes.STRING
   }, {});
-  room.associate = function (models) {
-    room.belongsTo(models.RoomType, {
+  Room.associate = function (models) {
+    // associations can be defined here
+    Room.belongsTo(models.RoomFeature, {
       foreignKey: 'id',
-      sourceKey: 'roomId'
+      targetKey: 'roomId'
     });
   };
-  return room;
+  return Room;
 };

@@ -2,10 +2,22 @@ const models = require('../../models');
 
 exports.getRooms = async (req, res) => {
   try {
-    const rooms = await models.room.findAll({
-      attributes: { exclude: ['roomId'] },
+    const rooms = await models.Room.findAll({
+      include: [{
+        model: models.RoomFeature,
+        where: {
+          roomId: 1,
+        },
+        attributes: {
+          exclude: ['']
+        },
+        include: [{
+          model: models.Feature,
+        }],
+      }],
     });
-    res.json(rooms);
+
+    return res.json(rooms);
   } catch (e) {
     console.log(e);
   }
@@ -26,7 +38,7 @@ exports.addRoom = async (req, res) => {
       return res.json({ code: 500, message: "Please provide a room name." })
     }
 
-    const newRoom = await models.room.create({
+    const newRoom = await models.Room.create({
       name,
       available_qty,
       description,
@@ -35,60 +47,70 @@ exports.addRoom = async (req, res) => {
       price,
     });
 
-    res.json({ code: 200, newRoom });
+    return res.json({ code: 200, newRoom });
   } catch (e) {
     console.log(e);
   }
 }
 
-exports.getRoomType = async (req, res) => {
+exports.getRoom = async (req, res) => {
   try {
-    const types = await models.RoomType.findAll({
-      raw: true,
-      attributes: [],
-      include: [
-        {
-          model: models.room,
-          attributes: [['name', 'room']],
-        },
-        {
-          model: models.amenities,
-          attributes: [['name', 'amenities']],
-        },
-        {
-          model: models.bed,
-          attributes: [['name', 'bed']],
-        },
-        {
-          model: models.feature,
-          attributes: [['name', 'feature']],
-        },
-      ]
-    })
-    res.json(types);
+    const id = req.params.id;
+    const rooms = await models.Room.findAll({
+      where: {
+        id
+      },
+      attributes: {
+        exclude: ['roomId']
+      },
+    });
+    if (rooms.length === 0) {
+      return res.json({ code: 404, message: "Cannot be found." })
+    }
+    return res.json(rooms[0]);
   } catch (e) {
-    console.log(e);
+    throw new Error(e);
   }
 }
 
-exports.addRoomType = async (req, res) => {
+exports.updateRoom = async (req, res) => {
   try {
+    const id = req.params.id;
     const {
-      roomId,
-      bedId,
-      featureId,
-      amenitiesId,
+      name,
+      available_qty,
+      description,
+      size,
+      bed_qty,
+      price,
     } = req.body;
 
-    const newRoomType = await models.RoomType.create({
-      roomId,
-      bedId,
-      featureId,
-      amenitiesId,
-    });
+    const room = await models.Room.update({
+      name,
+      available_qty,
+      description,
+      size,
+      bed_qty,
+      price,
+    }, {
+        where: {
+          id
+        }
+      });
 
-    res.json({ code: 200, newRoomType });
+    res.json({ status: 200 });
+
   } catch (e) {
-    console.log(e);
+    throw new Error(e);
+  }
+}
+
+exports.deleteRoom = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await models.Room.destroy({ where: { id } });
+    res.json({ status: 200 });
+  } catch (e) {
+    throw new Error(e);
   }
 }
