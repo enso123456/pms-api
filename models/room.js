@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'id',
       targetKey: 'roomId'
     });
+    Room.belongsTo(models.Booking, {
+      foreignKey: 'id',
+      targetKey: 'roomId'
+    });
   };
   return Room;
 };
