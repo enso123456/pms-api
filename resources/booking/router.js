@@ -5,12 +5,12 @@ const Booking = require('./controller');
 const bookingCtr = Booking();
 const {
   checkRoomAvailability,
-  addBooking
+  addBooking,
+  getGuestBookingDetails
 } = bookingCtr;
 
-// router.param('id', bookingCtr.checkRoomAvailability);
 router.post('/', checkRoomAvailability, addBooking);
-// router.put('/:id', bookingCtr.updateGuestDetails);
+router.get('/', getGuestBookingDetails);
 
 module.exports = router;
 

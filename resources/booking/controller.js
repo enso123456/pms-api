@@ -2,17 +2,44 @@ const dateFns = require('date-fns');
 
 const models = require('../../models');
 
-const Booking = function () {
+const Booking = () => {
+
+  const filterQuery = (args) => {
+    let query = {};
+
+    if (typeof (args.roomId) !== "undefined") {
+      query.roomId = args.roomId;
+    }
+    if (typeof (args.checkin) !== "undefined") {
+      query.checkin = args.checkin;
+    }
+    if (typeof (args.checkout) !== "undefined") {
+      query.checkin = args.checkin;
+    }
+    if (typeof (args.guestId) !== "undefined") {
+      query.guestId = args.guestId;
+    }
+    return query;
+  }
   // get booking details
-  const getBookingDetails = async (req, res, next, id) => {
-    const { roomId, checkin } = req.body;
-    const room = await models.Booking.findAll({
-      where: {
-        roomId,
-        checkin
-      }
-    });
+  const getBookingDetails = async (args) => {
+    const queryString = filterQuery(args);
+    const room = await models.Booking.findAll({ where: queryString });
+
+    return room;
   };
+
+  const getGuestBookingDetails = async (req, res) => {
+    try {
+      const room = await getBookingDetails(req.body);
+      return res.json({
+        code: 200,
+        data: room
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   /**
    * Add booking
@@ -48,21 +75,26 @@ const Booking = function () {
       (typeof (args.guestId) !== "undefined");
   };
 
+  const bookingQueryValidation = (args) => {
+    return (typeof (args.roomId) !== "undefined") &&
+      (typeof (args.checkin) !== "undefined") &&
+      (typeof (args.checkout) !== "undefined");
+  };
+
   const checkRoomAvailability = async (req, res, next) => {
     try {
-      const { roomId, checkin } = req.body;
-      const room = await models.Booking.findAll({
-        where: {
-          roomId,
-          checkin
+      const isValidated = bookingQueryValidation(req.body);
+      if (isValidated) {
+        const queryString = filterQuery(req.body);
+        const room = await models.Booking.findAll({
+          where: queryString
+        });
+        if (room.length > 0) {
+          return res.json({ code: 500, message: "The room is already booked" });
+        } else {
+          res.booking = req.body;
+          return next();
         }
-      });
-
-      if (room.length > 0) {
-        return res.json({ code: 500, message: "The room is already booked" });
-      } else {
-        res.booking = req.body;
-        next();
       }
     } catch (e) {
       console.log(e);
@@ -72,7 +104,8 @@ const Booking = function () {
   return {
     addBooking,
     checkRoomAvailability,
-    getBookingDetails
+    getBookingDetails,
+    getGuestBookingDetails
   };
 
 };
