@@ -7,12 +7,12 @@ const Guest = function () {
 
       if (isValidated) {
         const guest = await models.Guest.create(req.body);
-        res.json({
-          success: true,
+        return res.json({
+          code: 200,
           data: guest
         });
       } else {
-        res.json({
+        return res.json({
           code: 500,
           message: "Missing guest details",
         });
