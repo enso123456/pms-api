@@ -6,11 +6,13 @@ const bookingCtr = Booking();
 const {
   checkRoomAvailability,
   addBooking,
-  getGuestBookingDetails
+  getGuestBookingDetails,
+  updateGuestBooking
 } = bookingCtr;
 
 router.post('/', checkRoomAvailability, addBooking);
 router.get('/', getGuestBookingDetails);
+router.put('/', updateGuestBooking);
 
 module.exports = router;
 
