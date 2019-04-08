@@ -74,11 +74,21 @@ const Guest = function () {
       (typeof (args.email) !== "undefined");
   };
 
+  const getAllGuests = async (req, res) => {
+    try {
+      const guests = await models.Guest.findAll({});
+      res.json({ status: 200, data: guests })
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
   return {
     addGuest,
     getGuestDetails,
     updateGuestDetails,
-    findGuest
+    findGuest,
+    getAllGuests
   };
 };
 

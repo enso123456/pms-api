@@ -5,6 +5,7 @@ const controller = require('./controller');
 
 router.param('id', controller.findGuest);
 
+router.get('/', controller.getAllGuests);
 router.get('/:id', controller.getGuestDetails);
 router.post('/', controller.addGuest);
 router.put('/:id', controller.updateGuestDetails);
