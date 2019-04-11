@@ -12,10 +12,11 @@ const Guest = function () {
           data: guest
         });
       } else {
-        return res.json({
-          code: 500,
-          message: "Missing guest details",
-        });
+        res.status(500).send('Missing guest details');
+        // return res.json({
+        //   code: 500,
+        //   message: "Missing guest details",
+        // });
       }
     } catch (e) {
       console.log(e);
